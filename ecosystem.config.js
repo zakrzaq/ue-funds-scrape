@@ -9,8 +9,9 @@ module.exports = {
       max_memory_restart: "200M",
       env: {
         NODE_ENV: "production",
-        TELEGRAM_BOT_TOKEN: "6993230820:AAEZ6poIZYwt-K5qe8Rn1cAfF7dO25F0EKQ",
-        TELEGRAM_CHAT_ID: "7510172345",
+      },
+      env_production: {
+        NODE_ENV: "production",
       },
     },
   ],

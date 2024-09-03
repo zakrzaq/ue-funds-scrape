@@ -11,7 +11,7 @@ const tasks = [
     id: 1,
     name: "EU Funds Slaskie",
     url: "https://funduszeue.slaskie.pl/czytaj/inne_szkolenia_dotacje_outplacement",
-    runtimes: ["09:00", "17:00"],
+    runtimes: ["09:00", "16:00", "21:30"],
   },
 ];
 

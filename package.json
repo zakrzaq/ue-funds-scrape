@@ -4,11 +4,11 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "npx tsc && pm2 start ecosystem.config.js",
-    "stop": "pm2 stop webscraper-signal-bot",
-    "restart": "pm2 restart webscraper-signal-bot",
-    "delete": "pm2 delete webscraper-signal-bot",
-    "status": "pm2 status",
+    "pm2:start": "npx tsc && pm2 start ecosystem.config.js --env production",
+    "pm2:stop": "pm2 stop eu-funds-scape",
+    "pm2:restart": "pm2 restart eu-funds-scape",
+    "pm2:delete": "pm2 delete eu-funds-scape",
+    "pm2:status": "pm2 status",
     "deploy": "npm run build && npm run pm2:restart"
   },
   "keywords": [],
