@@ -3,6 +3,7 @@ import puppeteer from "puppeteer";
 import { scheduleJob } from "node-schedule";
 import { processEuFundsLinks } from "./ue-funds";
 
+require("dotenv").config();
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 

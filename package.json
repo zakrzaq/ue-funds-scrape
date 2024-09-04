@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
+    "start": "node dist/index.js",
     "pm2:start": "npx tsc && pm2 start ecosystem.config.js --env production",
     "pm2:stop": "pm2 stop eu-funds-scape",
     "pm2:restart": "pm2 restart eu-funds-scape",
