@@ -1,4 +1,7 @@
-export const processEuFundsLinks = (links: string[]): string[] => {
+import puppeteer from "puppeteer";
+import { sendUeMessage } from "./telegram";
+
+const processEuFundsLinks = (links: string[]): string[] => {
   const noRequired = [
     "https://funduszeue.slaskie.pl/",
     "https://funduszeue.slaskie.pl/OProgramie/",
@@ -11,4 +14,62 @@ export const processEuFundsLinks = (links: string[]): string[] => {
     "#ocena",
   ];
   return links.filter((link) => !noRequired.includes(link));
+};
+
+const getUeFundsLinks = async (): Promise<string[]> => {
+  try {
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.goto(
+      "https://funduszeue.slaskie.pl/czytaj/inne_szkolenia_dotacje_outplacement",
+      { waitUntil: "networkidle2" },
+    );
+
+    const links = await page.evaluate(() => {
+      const anchorElements = document.querySelectorAll("#main-content a[href]");
+      return Array.from(anchorElements)
+        .map((anchor) => anchor.getAttribute("href"))
+        .filter((href) => href) as string[];
+    });
+
+    await browser.close();
+    return processEuFundsLinks(links);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(
+        "Error fetching the webpage with Puppeteer:",
+        error.message,
+      );
+    } else {
+      console.error(
+        "Error fetching the webpage with Puppeteer: Unknown error",
+        error,
+      );
+    }
+    return [];
+  }
+};
+
+export const UeFundsTask = async () => {
+  try {
+    const result = await getUeFundsLinks();
+    if (result.length >= 1) {
+      const message = `Links found for UE FUNDS:\n\n${result.join("\n")}`;
+      await sendUeMessage(message);
+    } else {
+      console.log(`No links found for EU FUNDS`);
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(
+        "Error fetching the webpage with Puppeteer:",
+        error.message,
+      );
+    } else {
+      console.error(
+        "Error fetching the webpage with Puppeteer: Unknown error",
+        error,
+      );
+    }
+  }
 };

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const TELEGRAM_BOT_TOKEN = "6993230820:AAEZ6poIZYwt-K5qe8Rn1cAfF7dO25F0EKQ";
+const TELEGRAM_BOT_TOKEN = "7379152910:AAEOKIPQ07CDRvwKOW2_vM9Ri2gVngDlYKI";
 
 const getChatId = async () => {
   try {
