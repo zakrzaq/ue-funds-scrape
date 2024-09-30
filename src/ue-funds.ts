@@ -10,7 +10,7 @@ const processEuFundsLinks = (links: string[]): string[] => {
     "https://funduszeue.slaskie.pl/czytaj/wojewodzki_urzad_pracy_w_katowicach",
     "https://funduszeue.slaskie.pl/czytaj/znajdz_dofinansowanie_projekty_wup",
     "https://funduszeue.slaskie.pl/czytaj/osoby_fizyczne",
-    // "https://funduszeue.slaskie.pl/czytaj/5_4_aktywizacja_zawodowa_13082024",
+    "https://funduszeue.slaskie.pl/czytaj/5_4_aktywizacja_zawodowa_13082024",
     "#ocena",
   ];
   return links.filter((link) => !noRequired.includes(link));

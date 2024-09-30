@@ -21,12 +21,14 @@
     "cheerio": "^1.0.0",
     "dotenv": "^16.4.5",
     "node-schedule": "^2.1.1",
+    "pg": "^8.13.0",
     "puppeteer": "^23.2.1"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.35",
     "@types/node": "^22.5.2",
     "@types/node-schedule": "^2.1.7",
+    "@types/pg": "^8.11.10",
     "typescript": "^5.5.4"
   }
 }

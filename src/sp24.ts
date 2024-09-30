@@ -1,7 +1,10 @@
 import puppeteer from "puppeteer";
 import { sendSp24Messages } from "./telegram";
+import { ArticleManager } from "./libs/ArticleManager";
 
 export const sp24Task = async () => {
+  const articleManager = new ArticleManager("downloadedSp24.json");
+
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
@@ -23,15 +26,24 @@ export const sp24Task = async () => {
     });
 
     const notEmptyArticles = articlesContent
-      .filter((article) => {
-        if (article.text.length > 0 && article.images.length > 0) {
-          return article;
-        }
-      })
+      .filter((article) => article.text.length > 0 && article.images.length > 0)
       .slice(0, 3);
 
     return notEmptyArticles;
   });
 
-  sendSp24Messages(articles);
+  const newArticles = await articleManager.getNewArticles(articles);
+
+  if (newArticles.length > 0) {
+    sendSp24Messages(newArticles);
+
+    // Save new articles
+    await articleManager.saveArticles(newArticles);
+    console.log("New articles saved.");
+  } else {
+    console.log("No new articles found.");
+  }
+
+  await articleManager.close(); // Close the database connection
+  await browser.close();
 };
