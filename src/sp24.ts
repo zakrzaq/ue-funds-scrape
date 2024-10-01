@@ -1,9 +1,10 @@
 import puppeteer from "puppeteer";
 import { sendSp24Messages } from "./telegram";
 import { ArticleManager } from "./libs/ArticleManager";
+import logger from "./services/logger";
 
 export const sp24Task = async () => {
-  const articleManager = new ArticleManager("downloadedSp24.json");
+  const articleManager = new ArticleManager("downloadedSp24");
 
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
@@ -36,14 +37,11 @@ export const sp24Task = async () => {
 
   if (newArticles.length > 0) {
     sendSp24Messages(newArticles);
-
-    // Save new articles
     await articleManager.saveArticles(newArticles);
-    console.log("New articles saved.");
   } else {
-    console.log("No new articles found.");
+    logger.warn("No new articles found.");
   }
 
-  await articleManager.close(); // Close the database connection
+  await articleManager.close();
   await browser.close();
 };

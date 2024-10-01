@@ -1,6 +1,7 @@
 import { scheduleJob } from "node-schedule";
 import { UeFundsTask } from "./ue-funds";
 import { sp24Task } from "./sp24";
+import logger from "./services/logger";
 
 require("dotenv").config();
 
@@ -25,13 +26,16 @@ const runTask = async (task: {
   runtimes: string[];
   controller: () => Promise<void>;
 }) => {
-  console.log(`Running task: ${task.name}`);
+  logger.info(`Running task: ${task.name}`);
   await task.controller();
 };
 
 const scheduleTasks = () => {
   tasks.forEach((task) => {
     runTask(task);
+    logger.info(
+      `Scheduled task '${task.name}' for ${task.runtimes.join(", ")}`,
+    );
 
     task.runtimes.forEach((runtime) => {
       const [hour, minute] = runtime.split(":").map(Number);
@@ -40,8 +44,6 @@ const scheduleTasks = () => {
       scheduleJob(cronExpression, () => {
         runTask(task);
       });
-
-      console.log(`Scheduled task '${task.name}' for ${runtime}`);
     });
   });
 };

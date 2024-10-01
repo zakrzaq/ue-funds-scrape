@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer";
 import { sendUeMessage } from "./telegram";
+import logger from "./services/logger";
 
 const processEuFundsLinks = (links: string[]): string[] => {
   const noRequired = [
@@ -36,12 +37,9 @@ const getUeFundsLinks = async (): Promise<string[]> => {
     return processEuFundsLinks(links);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error(
-        "Error fetching the webpage with Puppeteer:",
-        error.message,
-      );
+      logger.error("Error fetching the webpage with Puppeteer:", error.message);
     } else {
-      console.error(
+      logger.error(
         "Error fetching the webpage with Puppeteer: Unknown error",
         error,
       );
@@ -57,16 +55,13 @@ export const UeFundsTask = async () => {
       const message = `Links found for UE FUNDS:\n\n${result.join("\n")}`;
       await sendUeMessage(message);
     } else {
-      console.log(`No links found for EU FUNDS`);
+      logger.warn(`No links found for EU FUNDS`);
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error(
-        "Error fetching the webpage with Puppeteer:",
-        error.message,
-      );
+      logger.error("Error fetching the webpage with Puppeteer:", error.message);
     } else {
-      console.error(
+      logger.error(
         "Error fetching the webpage with Puppeteer: Unknown error",
         error,
       );

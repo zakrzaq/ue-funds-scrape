@@ -1,4 +1,5 @@
 import axios from "axios";
+import logger from "./services/logger";
 
 require("dotenv").config();
 
@@ -13,15 +14,12 @@ export const sendTelegramMessage = async (
       chat_id: chatId,
       text: message,
     });
-    console.log("Message sent successfully via Telegram");
+    logger.info("Message sent successfully via Telegram");
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error("Failed to send message via Telegram:", error.message);
+      logger.error("Failed to send message via Telegram:", error.message);
     } else {
-      console.error(
-        "Failed to send message via Telegram: Unknown error",
-        error,
-      );
+      logger.error("Failed to send message via Telegram: Unknown error", error);
     }
   }
 };
@@ -37,15 +35,12 @@ export const sendTelegramPicture = async (
       chat_id: chatId,
       photo: photo,
     });
-    console.log("Message sent successfully via Telegram");
+    logger.info("Message sent successfully via Telegram");
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error("Failed to send message via Telegram:", error.message);
+      logger.error("Failed to send message via Telegram:", error.message);
     } else {
-      console.error(
-        "Failed to send message via Telegram: Unknown error",
-        error,
-      );
+      logger.error("Failed to send message via Telegram: Unknown error", error);
     }
   }
 };
@@ -74,7 +69,6 @@ export const sendSp24Messages = async (sp24Messages: Sp24Message[]) => {
 
     if (message.images.length > 0) {
       message.images.forEach((imgUrl) => {
-        console.log(imgUrl);
         sendTelegramPicture(SP24_BOT_TOKEN, SP24_CHAT_ID, imgUrl);
       });
     }

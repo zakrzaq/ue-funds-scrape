@@ -1,5 +1,7 @@
 import { Client } from "pg";
 import path from "path";
+import { pgConfig } from "../services/db";
+import logger from "../services/logger";
 
 interface Article {
   text: string[];
@@ -11,15 +13,12 @@ export class ArticleManager {
   private tableName: string;
 
   constructor(filePath: string) {
-    this.tableName = path.basename(filePath, ".json");
-    this.client = new Client({
-      user: "zakrzaq",
-      host: "localhost",
-      database: "oberon_db",
-      password: "Ella0957!",
-      port: 5432,
+    this.tableName = path.basename(filePath);
+    this.client = new Client({ ...pgConfig });
+    this.client.connect().then(() => {
+      logger.info(`Connected to database: ${this.tableName}`);
+      this.initializeTable();
     });
-    this.client.connect().then(() => this.initializeTable());
   }
 
   private async initializeTable() {
@@ -41,12 +40,14 @@ export class ArticleManager {
     });
 
     await Promise.all(insertQueries.map((query) => this.client.query(query)));
+    logger.info(`Articles saved to database: ${this.tableName}`);
   }
 
   private async getDownloadedArticles(): Promise<Article[]> {
     const res = await this.client.query(
       `SELECT text, images FROM ${this.tableName}`,
     );
+    logger.info("Articles retrieved from database");
     return res.rows.map((row) => ({
       text: row.text,
       images: row.images,
@@ -67,5 +68,6 @@ export class ArticleManager {
 
   public async close() {
     await this.client.end();
+    logger.info(`Disconnected from database: ${this.tableName}`);
   }
 }
